@@ -11,6 +11,9 @@ public class Bunker : MonoBehaviour
     public GameObject HealthBar;
     Slider Slider_HealthBar;
 
+
+    [SerializeField] MANAGER managerScript;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -32,8 +35,14 @@ public class Bunker : MonoBehaviour
 
     public void TakeDamage(float Damage)
     {
-        Debug.Log(Damage + "dégats");
         CurrentHealth = CurrentHealth -= Damage;
         Slider_HealthBar.value = CurrentHealth;
+        if (CurrentHealth <= 0f) Death();
+    }
+
+    void Death()
+    {
+        managerScript.GameOver();
+        
     }
 }

@@ -56,13 +56,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Script\ClickTrigger.cs" />
+    <Compile Include="Assets\Script\ViewportHandler.cs" />
     <Compile Include="Assets\Script\Shop\VerrouObjShop.cs" />
     <Compile Include="Assets\Script\Singleton.cs" />
     <Compile Include="Assets\Script\Bunker.cs" />
     <Compile Include="Assets\Script\Clicker.cs" />
     <Compile Include="Assets\Spawner01.cs" />
     <Compile Include="Assets\Script\Ennemy.cs" />
+    <Compile Include="Assets\Script\ManagerSpawnScript.cs" />
     <Compile Include="Assets\Script\MANAGER.cs" />
+    <Compile Include="Assets\Script\MainMenuMAnager.cs" />
   </ItemGroup>
   <ItemGroup>
      <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
@@ -79,6 +82,7 @@
      <None Include="Assets\TextMesh Pro\Resources\LineBreaking Leading Characters.txt" />
      <None Include="Assets\TextMesh Pro\Shaders\TMPro_Properties.cginc" />
      <None Include="Assets\TextMesh Pro\Shaders\TMPro_Surface.cginc" />
+     <None Include="Assets\Font\Standard Font\d-din\SIL Open Font License.txt" />
      <None Include="Assets\TextMesh Pro\Resources\LineBreaking Following Characters.txt" />
      <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Masking.shader" />
      <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF Overlay.shader" />

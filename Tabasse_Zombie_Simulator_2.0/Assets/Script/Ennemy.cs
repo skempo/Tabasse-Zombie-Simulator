@@ -1,15 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.UI;
+
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.Timeline;
 
 public class Ennemy : MonoBehaviour
 {
     [Header("Health Variables")]
-    public int CurrentHealth;
-    public int MaxHealth;
-
+    int CurrentHealth;
+    [SerializeField] int MaxHealth;
 
 
     [Header("Movement Variables")]
@@ -20,54 +20,108 @@ public class Ennemy : MonoBehaviour
     GameObject Bunker_gameObject;
     Bunker BunkerScript;
 
-    public float Damage;
-    public float Cooldown;
+    [Header("Attack Variables")]
+    [SerializeField] float Damage;
+    [SerializeField] float Cooldown;
     float time_Cooldown = 0f;
     bool CanAttack = true;
 
-
-
     Animator myAnim;
 
+    [Space(10)]
+    [SerializeField] GameObject HealthCountPrefab;
+    [SerializeField] Transform transformHealthCount;
+    GameObject myHealthCount;
+    Transform transformCanvas;
 
+    GameObject myCollisionObject;
+
+    bool onFeedbackTouched = false;
+    float timerFeedbackTouched = 0;
+    [SerializeField] Color BasicColor;
+    [SerializeField] Color TouchedColor;
+
+    private void Awake()
+    {
+        //cherche le canvas dans la scene 
+        transformCanvas = GameObject.Find("Canvas").transform;
+    }
     private void Start()
     {
         myAnim = GetComponent<Animator>();
         CurrentHealth = MaxHealth;
 
+        //cible le bunker au centre de la scene 
         target = new Vector2(0f, 0f);
 
+        //instantie le decompte de PV
+        myHealthCount = Instantiate(HealthCountPrefab, transformHealthCount.position, Quaternion.identity,transformCanvas );
+        myHealthCount.GetComponent<Text>().text = CurrentHealth.ToString();
+
+        
+        
     }
 
 
     private void Update()
     {
+        step = speed * Time.deltaTime;
+        transform.position = Vector2.MoveTowards(transform.position, target, step);
+
+        //quand Enemy Mort
         if (CurrentHealth <= 0)
         {
             GameObject.Destroy(gameObject);
+            Destroy(myHealthCount);
+            MANAGER.Instance.AddScore(200);
+            
         }
 
+        
         if(CanAttack == false)
         {
             CooldownAttack(Cooldown);
         }
 
-    }
+        myHealthCount.transform.position = transformHealthCount.position;
 
+
+        if (onFeedbackTouched && timerFeedbackTouched < 0.1)
+        {
+            transform.GetChild(1).GetComponent<SpriteRenderer>().color = TouchedColor;
+            timerFeedbackTouched += Time.deltaTime;
+        }
+        else
+        {
+            transform.GetChild(1).GetComponent<SpriteRenderer>().color = BasicColor;
+            timerFeedbackTouched = 0;
+            onFeedbackTouched = false;
+        }
+
+
+    }
+    /*
     //détecte si touché par clicker
     private void OnTriggerEnter2D(Collider2D collision)
     {
-
-        CurrentHealth -= 1 ;
-        myAnim.SetTrigger("Take It");
+        if (myCollisionObject == null && collision.tag == "ClickTrigger")
+        {
+            myCollisionObject = collision.gameObject;
+            CurrentHealth -= 1;
+            myAnim.SetTrigger("Take It");
+            myHealthCount.GetComponent<Text>().text = CurrentHealth.ToString();
+            
+            Destroy(collision.gameObject);
+        }
+       
     }
-
-    //Movement
-    private void FixedUpdate()
+    */
+    public void TakeDamage (int damage)
     {
-        step = speed * Time.deltaTime;
-        transform.position = Vector2.MoveTowards(transform.position, target, step);
-
+        CurrentHealth -= damage;
+        myAnim.SetTrigger("Take It");
+        onFeedbackTouched = true;
+        myHealthCount.GetComponent<Text>().text = CurrentHealth.ToString();
     }
 
     private void OnCollisionStay2D(Collision2D collision)
