@@ -13,22 +13,23 @@ public class Ennemy : MonoBehaviour
 
 
     [Header("Movement Variables")]
-    public Vector2 target;
-    public float speed;
+    [SerializeField] Vector2 target;
+    [SerializeField] float speed;
+    float slowedSpeed;
     private float step;
 
     GameObject Bunker_gameObject;
     Bunker BunkerScript;
 
     [Header("Attack Variables")]
-    [SerializeField] float Damage;
+    [SerializeField] float myDamage;
     [SerializeField] float Cooldown;
     float time_Cooldown = 0f;
     bool CanAttack = true;
 
     Animator myAnim;
 
-    [Space(10)]
+    [Header("HealthCount")]
     [SerializeField] GameObject HealthCountPrefab;
     [SerializeField] Transform transformHealthCount;
     GameObject myHealthCount;
@@ -36,10 +37,15 @@ public class Ennemy : MonoBehaviour
 
     GameObject myCollisionObject;
 
+    [Header("FeedbackTouched")]
     bool onFeedbackTouched = false;
     float timerFeedbackTouched = 0;
     [SerializeField] Color BasicColor;
     [SerializeField] Color TouchedColor;
+
+    [SerializeField] float MaxTimeSlow;
+    float timeSlow = 0f;
+    bool isSlowingDown = false;
 
     private void Awake()
     {
@@ -50,6 +56,8 @@ public class Ennemy : MonoBehaviour
     {
         myAnim = GetComponent<Animator>();
         CurrentHealth = MaxHealth;
+
+        slowedSpeed = speed / 2;
 
         //cible le bunker au centre de la scene 
         target = new Vector2(0f, 0f);
@@ -65,27 +73,31 @@ public class Ennemy : MonoBehaviour
 
     private void Update()
     {
-        step = speed * Time.deltaTime;
+        if (!isSlowingDown) step = speed * Time.deltaTime;
+        else
+        {
+            step = slowedSpeed * Time.deltaTime;
+            if (timeSlow < MaxTimeSlow)
+            {
+                timeSlow += Time.deltaTime;
+            }
+            else isSlowingDown = false;
+        } 
+            
         transform.position = Vector2.MoveTowards(transform.position, target, step);
 
         //quand Enemy Mort
-        if (CurrentHealth <= 0)
-        {
-            GameObject.Destroy(gameObject);
-            Destroy(myHealthCount);
-            MANAGER.Instance.AddScore(200);
-            
-        }
-
         
+
+        /*
         if(CanAttack == false)
         {
             CooldownAttack(Cooldown);
         }
-
+        */
         myHealthCount.transform.position = transformHealthCount.position;
 
-
+        /*
         if (onFeedbackTouched && timerFeedbackTouched < 0.1)
         {
             transform.GetChild(1).GetComponent<SpriteRenderer>().color = TouchedColor;
@@ -97,33 +109,47 @@ public class Ennemy : MonoBehaviour
             timerFeedbackTouched = 0;
             onFeedbackTouched = false;
         }
-
+        */
 
     }
-    /*
-    //détecte si touché par clicker
-    private void OnTriggerEnter2D(Collider2D collision)
+
+
+    private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (myCollisionObject == null && collision.tag == "ClickTrigger")
+        if (collision.gameObject.tag == "Bunker")
         {
-            myCollisionObject = collision.gameObject;
-            CurrentHealth -= 1;
-            myAnim.SetTrigger("Take It");
-            myHealthCount.GetComponent<Text>().text = CurrentHealth.ToString();
-            
-            Destroy(collision.gameObject);
+            Bunker_gameObject = collision.gameObject;
+            BunkerScript = Bunker_gameObject.GetComponent<Bunker>();
+            BunkerScript.TakeDamage(myDamage);
+            Death();
+
+
         }
-       
-    }
-    */
+    } 
+
     public void TakeDamage (int damage)
     {
         CurrentHealth -= damage;
         myAnim.SetTrigger("Take It");
-        onFeedbackTouched = true;
+        //onFeedbackTouched = true;
         myHealthCount.GetComponent<Text>().text = CurrentHealth.ToString();
+
+        isSlowingDown = true;
+        timeSlow = 0f;
+
+        if (CurrentHealth <= 0)
+        {
+            MANAGER.Instance.AddScore(200);
+            Death();
+        }
     }
 
+    void Death()
+    {
+        Destroy(gameObject);
+        Destroy(myHealthCount);
+    }
+    /*
     private void OnCollisionStay2D(Collision2D collision)
     {
         
@@ -146,7 +172,8 @@ public class Ennemy : MonoBehaviour
           
         }
     }
-
+    
+    
     void CooldownAttack(float Cooldown)
     {
         time_Cooldown = time_Cooldown += Time.deltaTime;
@@ -158,6 +185,6 @@ public class Ennemy : MonoBehaviour
         }
 
     }
-
+    */
     
 }

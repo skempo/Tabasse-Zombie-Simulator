@@ -550,7 +550,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spawnEnnemy: {fileID: 535957823469611919, guid: 3a60a984c4a56854a94ea20191cca98e, type: 3}
-  MinTimeSpawn: 1
+  MinTimeSpawn: 2
   MaxTimeSpawn: 5
   speed: 2
   TSpawn1Pos: {x: 0, y: 0}
@@ -902,9 +902,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spawnEnnemy: {fileID: 535957823469611919, guid: 3a60a984c4a56854a94ea20191cca98e, type: 3}
-  MinTimeSpawn: 1
+  MinTimeSpawn: 2
   MaxTimeSpawn: 5
-  speed: 2
+  speed: 3
   TSpawn1Pos: {x: 0, y: 0}
   TSpawn2Pos: {x: 0, y: 0}
   TargetPos: {x: 0, y: 0}
@@ -1057,7 +1057,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 2200, y: 1100}
+  m_SizeDelta: {x: 3000, y: 2000}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &583567037
 MonoBehaviour:
@@ -2375,9 +2375,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spawnEnnemy: {fileID: 535957823469611919, guid: 3a60a984c4a56854a94ea20191cca98e, type: 3}
-  MinTimeSpawn: 1
+  MinTimeSpawn: 2
   MaxTimeSpawn: 5
-  speed: 2
+  speed: 3
   TSpawn1Pos: {x: 0, y: 0}
   TSpawn2Pos: {x: 0, y: 0}
   TargetPos: {x: 0, y: 0}
@@ -2456,9 +2456,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ScoreTxt: {fileID: 361076007}
-  HighScoreGameOver: {fileID: 95822752}
   MenuPause: {fileID: 366397167}
   MenuGameOver: {fileID: 1654419450}
+  HighScoreGOtext: {fileID: 95822752}
   clickerScript: {fileID: 597651919}
 --- !u!4 &1419907131
 Transform:
@@ -2548,7 +2548,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spawnEnnemy: {fileID: 535957823469611919, guid: 3a60a984c4a56854a94ea20191cca98e, type: 3}
-  MinTimeSpawn: 1
+  MinTimeSpawn: 2
   MaxTimeSpawn: 5
   speed: 2
   TSpawn1Pos: {x: 0, y: 0}
